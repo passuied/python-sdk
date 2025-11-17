@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2023 The Dapr Authors
+# Copyright 2025 The Dapr Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -77,11 +77,13 @@ def hello_world_wf(ctx: wf.DaprWorkflowContext, wf_input):
 async def hello_act(ctx: wf.WorkflowActivityContext, wf_input):
     global counter
     counter += wf_input
+    await asyncio.sleep(0.1)  # simulates async work.
     print(f'New counter value is: {counter}!', flush=True)
 
 
+# an activity can also be left synchronous.
 @wfr.activity(name='hello_retryable_act')
-async def hello_retryable_act(ctx: wf.WorkflowActivityContext):
+def hello_retryable_act(ctx: wf.WorkflowActivityContext):
     global retry_count
     if (retry_count % 2) == 0:
         print(f'Retry count value is: {retry_count}!', flush=True)
